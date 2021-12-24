@@ -8,6 +8,14 @@
 
     - Create-React-APP(CRA) is going to be client side render, so the source code just has `<div id="root"></div>`. When there is low connection or JavaScript unable, you will see white screen without contents.
 
+- Library vs Framework
+
+  - You call and use a library.
+
+  - However, you put code on a specific place, and a framework calls your code.
+
+## Installation
+
 - Create next app
 
   - `npx create-next-app@latest`
@@ -47,7 +55,7 @@
     export default function NavBar() {
       const router = useRouter();
       return (
-        <>
+        <nav>
           <Link href='/'>
             <a style={{ color: router.pathname === '/' ? 'red' : 'blue' }}>
               Home
@@ -58,7 +66,7 @@
               About
             </a>
           </Link>
-        </>
+        </nav>
       );
     }
     ```
@@ -77,3 +85,79 @@
       );
     }
     ```
+
+## CSS Modules
+
+- Create `NavBar.module.css`
+
+  - ```css
+    .link {
+      text-decoration: none;
+    }
+
+    .active {
+      color: tomato;
+    }
+    ```
+
+- On `NavBar.js`
+
+  - ```jsx
+    import styles from './NavBar.module.css';
+
+    <a className={router.pathname === '/' ? styles.active : ''}>Single Class</a>
+    <a className={`${styles.link} ${router.pathname === '/' ? styles.active : ''}`}>Multiple Way 1</a>
+    <a className={[styles.link, router.pathname === '/about' ? styles.active : ''].join(' ')}>Multiple Way 2</a>
+    ```
+
+## Styles JSX
+
+- The scope of style jsx is only for the component because the style set up with a random classname.
+
+- It's JavaScript string, so you can use props inside the style.
+
+- On `NavBar.js`
+
+  - ```jsx
+    <a className={router.pathname === '/' ? 'active' : ''}>Home</a>
+
+    <style jsx>{`
+      a {
+        text-decoration: none;
+      }
+      .active {
+        color: tomato;
+      }
+    `}</style>
+    ```
+
+## Global Layout
+
+- There is Global CSS on `\styles\globals.css`, but it cannot be imported from files other than `\pages\_app.js`
+
+- Create `\pages\_app.js`
+
+  - It's a blueprint. `Component` will be the pages. The others will be used as global.
+
+  - Global style needs `global`.
+
+  - ```jsx
+    import NavBar from '../components/NavBar';
+    import '../styles/globals.css';
+
+    export default function App({ Component, pageProps }) {
+      return (
+        <>
+          <NavBar />
+          <Component {...pageProps} />
+          <style jsx global>{`
+            a {
+              color: blue;
+            }
+          `}</style>
+        </>
+      );
+    }
+    ```
+
+  - Remove `<NavBar />` from `index.js` and `about.js`.
