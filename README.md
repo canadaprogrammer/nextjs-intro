@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Introduction
 
-## Getting Started
+- Next.js is the React Framework for production. It provides hybrid static & server rendering, TypeScript support, smart bundling, route pre-fetching, and more. No config needed.
 
-First, run the development server:
+  - If you create a page_name.js under pages folder, it's going to show the component when you're going to /page_name.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+  - Pages will be pre render on Next.js, you can see HTML even though when there is low connection or JavaScript unable. It's really good for SEO.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    - Create-React-APP(CRA) is going to be client side render, so the source code just has `<div id="root"></div>`. When there is low connection or JavaScript unable, you will see white screen without contents.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Create next app
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+  - `npx create-next-app@latest`
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+    - If using typescript, `npx create-next-app@latest --typescript`
 
-## Learn More
+- Execute, `npm run dev`
 
-To learn more about Next.js, take a look at the following resources:
+- Initialize
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  - Remove folders under pages folder
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  - Create index.js under pages folder
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    - ```jsx
+      export default function Home() {
+        return (
+          <div>
+            <h1>Hello</h1>
+          </div>
+        );
+      }
+      ```
