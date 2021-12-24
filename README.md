@@ -31,3 +31,49 @@
         );
       }
       ```
+
+## Route
+
+- Use `Link` for `href`, style and className can't be on Link
+
+- Use `useRouter` for route information
+
+- Created `\components\NavBar.js
+
+  - ```jsx
+    import Link from 'next/link';
+    import { useRouter } from 'next/router';
+
+    export default function NavBar() {
+      const router = useRouter();
+      return (
+        <>
+          <Link href='/'>
+            <a style={{ color: router.pathname === '/' ? 'red' : 'blue' }}>
+              Home
+            </a>
+          </Link>
+          <Link href='/about'>
+            <a style={{ color: router.pathname === '/about' ? 'red' : 'blue' }}>
+              About
+            </a>
+          </Link>
+        </>
+      );
+    }
+    ```
+
+- On `index.js`
+
+  - ```jsx
+    import NavBar from '../components/NavBar';
+
+    export default function Home() {
+      return (
+        <div>
+          <NavBar />
+          <h1>Hello</h1>
+        </div>
+      );
+    }
+    ```
