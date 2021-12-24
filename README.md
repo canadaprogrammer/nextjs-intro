@@ -133,9 +133,9 @@
 
 ## Global Layout
 
-- There is Global CSS on `\styles\globals.css`, but it cannot be imported from files other than `\pages\_app.js`
+- There is Global CSS on `/styles/globals.css`, but it cannot be imported from files other than `/pages/_app.js`
 
-- Create `\pages\_app.js`
+- Create `/pages/_app.js`
 
   - It's a blueprint. `Component` will be the pages. The others will be used as global.
 
@@ -161,3 +161,62 @@
     ```
 
   - Remove `<NavBar />` from `index.js` and `about.js`.
+
+## Common Patterns
+
+### Add `Layout.js`
+
+- Create `./components/Layout.js`
+
+  - ```jsx
+    import NavBar from './NavBar';
+
+    export default function Layout({ children }) {
+      return (
+        <>
+          <NavBar />
+          <div>{children}</div>
+        </>
+      );
+    }
+    ```
+
+- On `_app.js`
+
+  - ```jsx
+    import Layout from '../components/Layout';
+    ...
+      return (
+        <Layout>
+          <Component {...PageProps} />
+        </Layout>
+      );
+    ```
+
+### Put `Head`
+
+- Create `./components/Seo.js`
+
+  - ```jsx
+    import Head from 'next/head';
+
+    export default function Seo({ title }) {
+      return (
+        <Head>
+          <title>{title} | Next.js Movies</title>
+        </Head>
+      );
+    }
+    ```
+
+- On `index.js`
+
+  - ```jsx
+    import Seo from '../components/Seo';
+    ...
+      return (
+        <div>
+          <Seo title="Home" />
+          ...
+      );
+    ```
