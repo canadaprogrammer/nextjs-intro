@@ -243,6 +243,14 @@
 
 - `Image` must have `src` and `alt` along with `width` and `height`, or `layout='fill'`.
 
+- Using `layout='fill'` along with the parent style to `position:relative;` with a width.
+
+- To apply `border-radius` on `Image`
+
+  - The parent style: `border-radius:15px;overflow:hidden;`
+
+  - The image style: `layout='fill' objectFit='cover'`
+
 ### Example
 
 - On `index.js`

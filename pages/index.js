@@ -21,6 +21,8 @@ export default function Home() {
               <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.original_title}
+                layout='fill'
+                objectFit='cover'
               />
             </div>
             <h4>{movie.original_title}</h4>
