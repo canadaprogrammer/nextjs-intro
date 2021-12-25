@@ -40,6 +40,8 @@
       }
       ```
 
+- Put resources on `/public`. You can use it by absolute path.
+
 ## Route
 
 - Use `Link` for `href`, style and className can't be on Link
@@ -219,4 +221,115 @@
           <Seo title="Home" />
           ...
       );
+    ```
+
+## Fetch Data
+
+- Copy API key from `themoviedb.org/settings/api`
+
+- Information related to getting popular movies from `https://developers.themoviedb.org/3/movies/get-popular-movies`
+
+  - `https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>`
+
+- The URL of an image; the info is on `https://developers.themoviedb.org/3/getting-started/images`
+
+  - `https://image.tmdb.org/t/p/w500/poster_path`
+
+- On `index.js`
+
+  - ```jsx
+    import { useState, useEffect } from 'react';
+
+    const API_KEY = 'f88b...';
+
+    export default function Home() {
+      const [movies, setMovies] = useState([]);
+      useEffect(() => {
+        (async () => {
+          const { results } = await (
+            await fetch(
+              `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
+            )
+          ).json();
+          setMovies(results);
+        })();
+      }, []);
+      return (
+        <div>
+          <Seo title='Home' />
+          {movies.length === 0 ? <h4>Loading...</h4> : null}
+          {movies?.map((movie) => (
+            <div key={movie.id}>
+              <h4>{movie.original_title}</h4>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    ```
+
+## Redirect and Rewrite
+
+- Redirect: A user will see the url is changed.
+
+- Rewrite: The source URL will only show to a user.
+
+- Hide API Key
+
+  - Use `rewrites()` to hide it from the Network
+
+  - Put the key on `.env`
+
+    - Create `.env`: `API_KEY=...`
+
+    - Add `.env` to `.gitignore`
+
+    - Add `const API_KEY = process.env.API_KEY;` instead of the key
+
+- On `next.config.js`
+
+  - ```js
+    const API_KEY = process.env.API_KEY;
+
+    module.exports = {
+      reactStrictMode: true,
+      async redirects() {
+        return [
+          {
+            source: '/contact',
+            destination: '/form',
+            permanent: false,
+          },
+        ];
+      },
+      async rewrites() {
+        return [
+          {
+            source: '/api/movies',
+            destination: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
+          },
+        ];
+      },
+    };
+    ```
+
+- Redirect URL with a path
+
+  - ```js
+    source: '/old-blog/:path',
+    destination: '/new-blog/:path',
+    ```
+
+- Redirect URL with all paths
+
+  - ```js
+    source: '/old-blog/:path*',
+    destination: '/new-blog/:path*',
+    ```
+
+- Redirect URL to external URL
+
+  - ```js
+    source: '/site',
+    destination: 'http://example.com',
     ```

@@ -26,6 +26,7 @@ export default function NavBar() {
         }
         a {
           text-transform: uppercase;
+          padding: 0.5rem 1rem;
         }
         .active {
           color: tomato;
