@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 // import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
 
@@ -10,13 +12,31 @@ export default function Home({ results }) {
   //     setMovies(results);
   //   })();
   // }, []);
+  const router = useRouter();
+  const onClick = (id, title, poster) =>
+    router.push(
+      {
+        pathname: `/movies/${id}`,
+        query: {
+          title,
+          poster,
+        },
+      },
+      `/movies/${id}`
+    );
   return (
     <div>
       <Seo title='Home' />
       {!results && <h4>Loading...</h4>}
       <div className='moviesContainer'>
         {results?.map((movie) => (
-          <div key={movie.id} className='movieWrapper'>
+          <div
+            key={movie.id}
+            className='movieWrapper'
+            onClick={() =>
+              onClick(movie.id, movie.original_title, movie.poster_path)
+            }
+          >
             <div className='movieImage'>
               <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -40,16 +60,17 @@ export default function Home({ results }) {
           padding: 15px;
           background-color: #eee;
           border-radius: 15px;
+          cursor: pointer;
+          transition: 0.2s transform ease-in;
+        }
+        .movieWrapper:hover {
+          transform: scale(1.02);
         }
         .movieImage {
           height: 300px;
           position: relative;
           border-radius: 15px;
           overflow: hidden;
-          transition: 0.2s transform ease-in;
-        }
-        .movieImage:hover {
-          transform: scale(1.02);
         }
         .movieWrapper h4 {
           text-align: center;

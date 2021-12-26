@@ -42,7 +42,7 @@
 
 - Put resources on `/public`. You can use it as a root directory
 
-## Route
+## Navigation
 
 - Use `Link` for `href`, style and className can't be on Link
 
@@ -237,6 +237,19 @@
 
   - `https://image.tmdb.org/t/p/w500/poster_path`
 
+- Add the domain for using the image
+
+  - On `next.config.js`
+
+    - ```js
+      module.exports = {
+        ...
+        images: {
+          domains: ['image.tmdb.org'],
+        },
+      };
+      ```
+
 ### Put Image
 
 - `import Image from 'next/image';`
@@ -304,6 +317,11 @@
               padding: 15px;
               background-color: #eee;
               border-radius: 15px;
+              cursor: pointer;
+              transition: 0.2s transform ease-in;
+            }
+            .movieWrapper:hover {
+              transform: scale(1.02);
             }
             .movieImage {
               height: 300px;
@@ -405,7 +423,7 @@
 
 ## Server Side Rendering
 
-- The page will render after getting data, so it's not visible until getting the data
+- The page will render after getting data, so it's not visible until getting the data. And the source code will have all html, so it's better for SEO.
 
 - Inside the function `getServerSidePros()` will only run on the server.
 
@@ -433,5 +451,170 @@
           results,
         }
       }
+    }
+    ```
+
+## Routes
+
+### Static Routes
+
+- For /about
+
+  - Create `/pages/about.js`
+
+- For /movies and /movies/all
+
+  - Create `/pages/movies/index.js` and `/pages/movies/all.js`
+
+### Dynamic Routes
+
+- For /movies/:id
+
+  - Create `/pages/movies/[id].js`
+
+  - Get `id` from `useRouter().query.id`
+
+  - ```jsx
+    import { useRouter } from 'next/router';
+
+    export default function Detail() {
+      const router = useRouter();
+      console.log(router.query.id);
+      return 'detail';
+    }
+    ```
+
+## Movie Detail page
+
+- Send query by `useRouter().push(url: url, as: url);`
+
+  - ```js
+    router.push(
+      {
+        // /movies/:id?title=<title>&poster=<poster>
+        pathname: `/movies/${id}`,
+        query: {
+          title,
+          poster,
+        },
+      },
+      // Show the url to /movies/:id on browser, but the query can get from router.query
+      `/movies/${id}`
+    );
+    ```
+
+- Send query by `Link`
+
+  - ```jsx
+    <Link
+      href={{
+        pathname: `/movies/${movie.id}`,
+        query: {
+          title: movie.original_title,
+          poster: movie.poster_path,
+        },
+      }}
+      as={`/movies/${movie.id}`}
+    >
+      <a>{movie.original_title}</a>
+    </Link>
+    ```
+
+- On `next.config.js`
+
+  - ```jsx
+    module.exports = {
+      ...
+      async rewrites() {
+        return [
+          ...
+          {
+            source: '/api/movies/:id',
+            destination: `https://api.themoviedb.org/3/movie/{movie_id}?api_key=&{API_KEY}`
+          },
+        ]
+      },
+    };
+    ```
+
+- On `index.js`
+
+  - ```jsx
+    import { useRouter } from 'next/router';
+
+    export default function Home({ results }) {
+      const router = useRouter();
+      const onClick = (id, title, poster) =>
+        router.push(
+          {
+            pathname: `/movies/${id}`,
+            query: {
+              title,
+              poster,
+            },
+          },
+          `/movies/${id}`
+        );
+      return (
+        ...
+              <div
+                key={movie.id}
+                className='movieWrapper'
+                onClick={() =>
+                  onClick(movie.id, movie.original_title, movie.poster_path)
+                }
+              >
+    ```
+
+- On `[id].js`
+
+  - ```jsx
+    import Image from 'next/image';
+    import { useRouter } from 'next/router';
+    import Seo from '../../components/Seo';
+
+    export default function Detail() {
+      const {
+        query: { title, poster },
+      } = useRouter();
+      return (
+        <div>
+          <Seo title='Movie Detail' />
+          {!title && <h4>Loading...</h4>}
+          <div className='moviesContainer'>
+            <div className='movieWrapper'>
+              <div className='movieImage'>
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${poster}`}
+                  alt={title}
+                  layout='fill'
+                  objectFit='cover'
+                />
+              </div>
+              <h4>{title}</h4>
+            </div>
+          </div>
+          <style jsx>{`
+            .movieWrapper {
+              width: calc(100% - 2rem);
+              margin: 1rem;
+              padding: 15px;
+              border-radius: 15px;
+            }
+            .movieImage {
+              height: 700px;
+              position: relative;
+              border-radius: 15px;
+              overflow: hidden;
+            }
+            .movieWrapper h4 {
+              text-align: center;
+              margin-top: 0.5rem;
+              margin-bottom: 0;
+              font-size: 1.5em;
+            }
+          `}</style>
+        </div>
+      );
     }
     ```
