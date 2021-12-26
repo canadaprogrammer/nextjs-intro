@@ -23,6 +23,9 @@ export default function NavBar() {
           gap: 10px;
           padding: 1rem;
           box-shadow: rgba(0, 0, 0, 0.3) 0px 30px 30px -24px;
+          background-color: white;
+          border-bottom-left-radius: 15px;
+          border-bottom-right-radius: 15px;
         }
         a {
           text-transform: uppercase;

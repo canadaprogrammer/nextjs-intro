@@ -671,3 +671,13 @@
         };
       }
       ```
+
+## 404 Page
+
+- Create `/pages/404.js`
+
+  - ```jsx
+    export default function NotFound() {
+      return <h4>Check the URL. This page doesn&apos;t exist.</h4>;
+    }
+    ```
