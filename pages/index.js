@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 // import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
@@ -16,13 +15,12 @@ export default function Home({ results }) {
   const onClick = (id, title, poster) =>
     router.push(
       {
-        pathname: `/movies/${id}`,
+        pathname: `/movies/${title}/${id}`,
         query: {
-          title,
           poster,
         },
       },
-      `/movies/${id}`
+      `/movies/${title}/${id}`
     );
   return (
     <div>

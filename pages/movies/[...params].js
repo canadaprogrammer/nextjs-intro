@@ -2,13 +2,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Seo from '../../components/Seo';
 
-export default function Detail() {
-  const {
-    query: { title, poster },
-  } = useRouter();
+export default function Detail({ params, query }) {
+  // const router = useRouter();
+  // const [title, id] = router.query.params || [];
+  const [title, id] = params;
+  const { poster } = query;
   return (
     <div>
-      <Seo title='Movie Detail' />
+      <Seo title={title} />
       {!title && <h4>Loading...</h4>}
       <div className='moviesContainer'>
         <div className='movieWrapper'>
@@ -45,4 +46,17 @@ export default function Detail() {
       `}</style>
     </div>
   );
+}
+
+export function getServerSideProps(content) {
+  const {
+    params: { params },
+  } = content;
+  const { query } = content;
+  return {
+    props: {
+      params,
+      query,
+    },
+  };
 }

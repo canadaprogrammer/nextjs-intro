@@ -579,7 +579,7 @@
       } = useRouter();
       return (
         <div>
-          <Seo title='Movie Detail' />
+          <Seo title={title} />
           {!title && <h4>Loading...</h4>}
           <div className='moviesContainer'>
             <div className='movieWrapper'>
@@ -618,3 +618,56 @@
       );
     }
     ```
+
+## Catch All
+
+- On `index.js`
+
+  - ```jsx
+    const onClick = (id, title, poster) =>
+      router.push(
+        {
+          pathname: `/movies/${title}/${id}`,
+          query: {
+            poster,
+          },
+        },
+        `/movies/${title}/${id}`
+      );
+    ```
+
+- Change `[id].js` to `[...params].js`
+
+  - Method 1: `useRouter()`
+
+    - ```jsx
+      export default function Detail() {
+        const router = useRouter();
+        const [title, id] = router.query.params || [];
+        const {poster} = router.query;
+        ...
+      }
+      ```
+
+  - Method 2: `getServerSideProps()`
+
+    - ```jsx
+      export default function Detail({ params, query }) {
+        const [title, id] = params;
+        const { poster } = query;
+        ...
+      }
+
+      export function getServerSideProps(content) {
+        const {
+          params: { params },
+        } = content;
+        const { query } = content;
+        return {
+          props: {
+            params,
+            query,
+          },
+        };
+      }
+      ```
