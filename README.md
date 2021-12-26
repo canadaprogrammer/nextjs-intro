@@ -40,7 +40,7 @@
       }
       ```
 
-- Put resources on `/public`. You can use it by absolute path.
+- Put resources on `/public`. You can use it as a root directory
 
 ## Route
 
@@ -401,4 +401,37 @@
   - ```js
     source: '/site',
     destination: 'http://example.com',
+    ```
+
+## Server Side Rendering
+
+- The page will render after getting data, so it's not visible until getting the data
+
+- Inside the function `getServerSidePros()` will only run on the server.
+
+- Get the data as `props`
+
+- On `index.js`
+
+  - ```jsx
+    export default function Home({results}) {
+      // const [movies, setMovies] = useState();
+      // useEffect(() => {
+      //   (async () => {
+      //     const { results } = await (await fetch(`/api/movies`)).json();
+      //     setMovies(results);
+      //   })();
+      // }, []);
+      return (
+        ...
+    }
+
+    export async function getServerSideProps() {
+      const { results } = await (await fetch(`http://localhost:3000/api/movies`)).json();
+      return {
+        props: {
+          results,
+        }
+      }
+    }
     ```

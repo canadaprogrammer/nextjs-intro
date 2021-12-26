@@ -1,21 +1,21 @@
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
 
-export default function Home() {
-  const [movies, setMovies] = useState([]);
-  useEffect(() => {
-    (async () => {
-      const { results } = await (await fetch(`/api/movies`)).json();
-      setMovies(results);
-    })();
-  }, []);
+export default function Home({ results }) {
+  // const [movies, setMovies] = useState();
+  // useEffect(() => {
+  //   (async () => {
+  //     const { results } = await (await fetch(`/api/movies`)).json();
+  //     setMovies(results);
+  //   })();
+  // }, []);
   return (
     <div>
       <Seo title='Home' />
-      {movies.length === 0 ? <h4>Loading...</h4> : null}
+      {!results && <h4>Loading...</h4>}
       <div className='moviesContainer'>
-        {movies?.map((movie) => (
+        {results?.map((movie) => (
           <div key={movie.id} className='movieWrapper'>
             <div className='movieImage'>
               <Image
@@ -46,6 +46,10 @@ export default function Home() {
           position: relative;
           border-radius: 15px;
           overflow: hidden;
+          transition: 0.2s transform ease-in;
+        }
+        .movieImage:hover {
+          transform: scale(1.02);
         }
         .movieWrapper h4 {
           text-align: center;
@@ -55,4 +59,15 @@ export default function Home() {
       `}</style>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const { results } = await (
+    await fetch(`http://localhost:3000/api/movies`)
+  ).json();
+  return {
+    props: {
+      results,
+    },
+  };
 }
